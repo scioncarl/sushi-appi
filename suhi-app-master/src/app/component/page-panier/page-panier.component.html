@@ -1,0 +1,139 @@
+<div class="container bg-white rounded-4 p-0">
+    <div class="bg-warning m-0 p-1 rounded-top-4" >
+        <h3><i class="bi bi-basket-fill ms-2"></i>  Votre panier </h3>
+    </div>
+    <div class="p-2">
+    
+
+    <!-- Option sur place ou à emporter : -->
+    <div class="rounded-2 bg-body-secondary p-2 m-2">
+        <h4>Vos options de commandes :</h4>
+        
+        <div class="ms-4">
+            Veuillez indiquer si vous désirer consommer <b>sur place</b> ou <b>à emporter</b> :
+            <input type="radio" class="btn-check"
+            name="choixEmporte" id="optSurPlace"
+            [checked]="panier.surPlace"
+            (input)="panier.surPlace = true;">
+            <label class="btn btn-outline-success m-2" for="optSurPlace">Sur place</label>
+
+            <input type="radio" class="btn-check"
+            name="choixEmporte" id="optEmporte" 
+            [checked]="!panier.surPlace"
+            (input)="panier.surPlace = false;">
+            <label class="btn btn-outline-success m-2" for="optEmporte">A Emporter</label>
+        </div>
+        
+    </div>
+
+    <!-- Information de synthèse du panier : -->
+    <div class="rounded-2 bg-body-secondary p-2 m-2">
+    <h4>Bilan de votre panier :</h4>
+    <div class="m-4">
+        <ul>    
+            <li>Mode de consommation :  <span *ngIf="panier.surPlace; else aEmporter"><b>SUR PLACE</b></span>
+                                        <ng-template #aEmporter><b>A EMPORTER</b></ng-template></li>
+            <li>Nombre de box du panier : {{ panier.articles.length }}</li>
+            <li>Nombre de pièces au total : {{ panier.nbPiecesTotal() }}</li>
+            <li>Montant total du panier : {{ panier.montantTotal().toFixed(2) }}€</li>
+    </ul>
+    </div>
+    </div>
+
+    <!-- Détail et gestion du contenu de la commande : -->
+    <div *ngIf="panier.articles.length > 0">
+    <div class="rounded-2 bg-body-secondary p-2 m-2">
+        <h4>Détails de votre commande :</h4>
+        <table class="table table-hover table-striped">
+            <thead class="table-primary" >
+                <tr class="table-in text-center">
+                <th>NOM DE LA BOX</th>
+                <th>DETAILS</th>
+                <th>QUANTITE</th>
+                <th><i class="bi bi-trash-fill"></i></th>
+                <th>PRIX UNITAIRE</th>
+                <th>PRIX</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <ng-container *ngFor="let box of panier.articles">
+                <tr class="table-secondary table-group-divider align-baseline border-black">
+                    <td class="w-25">{{ box.nom }}</td>
+                    <td class="text-center">
+                        <!-- Voir image box : -->
+                        <button class="btn btn-outline-dark" data-bs-toggle="modal" [attr.data-bs-target]="'#photo-box-' + box.id" style="font-size: 0.9em;"><i class="bi bi-eye-fill"></i></button></td>
+                    <td class="text-center">
+                        <!-- Bouton - : -->
+                        <button class="btn" (click)="panier.decNbBox(box)"><i class="bi bi-dash-circle-fill"></i></button>
+                        {{ box.quantiteCommande }}
+                        <!-- Bouton + : -->
+                        <button class="btn" (click)="panier.incNbBox(box)"><i class="bi bi-plus-circle-fill"></i></button>
+                    </td>
+                    <td class="text-center">
+                        <!-- Bouton trash : -->
+                        <button class="btn btn-outline-danger" (click)="panier.supBox(box)" style="font-size: 0.9em;"><i class="bi bi-trash-fill"></i></button></td>
+                    <td class="text-center">{{ box.prix }}€</td>
+                    <td class="text-center">{{ (box.quantiteCommande * box.prix).toFixed(2) }}€</td>
+                </tr>
+
+                <!-- AFFICHAGE DU MODALE - PHOTO DE LA BOX : -->
+                <div class="modal fade text-center" id="photo-box-{{ box.id }}" tabindex="-1" style="filter: drop-shadow(10px 10px 4px black);">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Corps principal : -->
+                            <!-- ----------------- -->
+                            <div class="modal-body">
+
+                                <!-- Image de la box : -->
+                                <div class="row border-black border-bottom m-0 p-0 mb-2 rounded-5" style="background-image: url('./assets/images/planche.jpg'); box-shadow: 8px 8px 5px black">
+                                    <img class="card-img-top col"            
+                                    src="{{ pathImage }}/{{ box.image }}"
+                                    alt="{{ box.nom }}"
+                                    style="width: 18em; filter: drop-shadow(2px 2px 4px black);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </ng-container>
+            </tbody>
+
+
+        </table>
+    </div>
+    </div>
+</div>
+
+    <!-- Validation du panier ou annulation de la commande : -->
+    <div class="bg-warning rounded-bottom-4 p-2">        
+        <h3>Vos actions sur votre panier :</h3>
+        <div class="row m-4">
+            <div *ngIf="panier.articles.length > 0 else panierVide">
+                <div class="col">
+                    <button  class="btn btn-success m-2">VALIDER VOTRE COMMANDE</button>
+                    <button class="btn btn-danger m-2" (click)="panier.viderPanier()">VIDER LE PANIER</button>
+                </div>
+            <div class="col text-end">
+                <h3><b>Total : {{ panier.montantTotal().toFixed(2) }}€</b></h3>
+            </div>
+            </div>
+
+            <ng-template #panierVide>
+                <div class="col-5">
+                    <b>Votre panier est vide, veuillez procéder à votre commande : </b>
+                </div>
+                <div class="col-3">
+                    <a class="btn btn-info" routerLink="/home" routerLinkActive="page">Choisir mes boxes</a>
+                </div>
+                
+            </ng-template>        
+        </div>
+    </div>
+  
+</div>
+
+
+
+

@@ -1,0 +1,156 @@
+<!-- -------------------------------------------------------- -->
+<!-- CARD DE PRESENTATION & INTERACTION PANIER POUR UNE BOX : -->
+<!-- -------------------------------------------------------- -->
+
+<div class="card m-4" style="width: 21rem; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.500);">
+
+    <!-- Image de la box : -->
+    <!-- ----------------- -->
+    <img class="card-img-top"
+    src="{{ pathImage }}/{{ box.image }}"
+    alt="{{ box.nom }}"
+    style="width: 20em;">
+
+    <div class="card-body p-0">
+
+        <!-- Bulle info quantité en panier :  -->
+        <!-- -------------------------------- -->
+        <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill"
+        [ngClass]="{'bg-warning': box.quantiteCommande <= 0, 'bg-success': box.quantiteCommande > 0}"
+        style="font-size: 1.3em;">
+        {{ box.quantiteCommande }}
+        </span>
+
+        <!-- Nom de la box : -->
+        <!-- --------------- -->
+        <h4 class="card-title ps-1 pt-1 pb-1 mb-0 bg-warning text-center">
+        <i class="bi bi-grip-horizontal me-2"></i>
+        {{ box.nom }}
+        <i class="bi bi-grip-horizontal ms-2"></i>
+        </h4>
+      
+        <!-- Informations sur la box : -->
+        <!-- ------------------------- -->
+        <div class="card-text bg-body-secondary text-center">
+            <p class="mb-0 pt-2"><strong><i class="bi bi-yin-yang" style="font-size: 1.2em;" ></i> Saveurs :</strong></p>      
+            <p>
+                <span *ngFor="let saveur of box.saveurs">
+                    <i class="bi bi-dot">{{ saveur }}</i>
+                </span>
+            </p>
+            <div>
+                <!-- Bouton du modale de visualisation du détail de la box : -->
+                <button type="button" class="btn btn-outline-warning mb-2" data-bs-toggle="modal" [attr.data-bs-target]="'#details-box-' + box.id" title="Voir le contenu de {{ box.nom }}">
+                <i class="bi bi-eye-fill" style="font-size: 1.5em;"></i></button>
+            
+            </div>
+            <div class="pb-2">
+                <h5>{{ box.nbPieces}} pièces : {{ box.prix }} €</h5>
+            </div>
+
+            <!-- Saisie de l'utilisateur : -->
+            <!-- ------------------------- -->
+            <div class="pb-2">
+
+                <!-- IU de gestion des quantités à ajouter au panier : -->
+                <!-- ------------------------------------------------- -->
+                <button type="button" class="btn btn-warning m-1 p-1 pt-0 pb-0" (click)="decQuantite()"><i class="bi bi-cart-dash-fill" style="font-size: 1.5em;"></i></button>
+                <input type="number" min="1" max="99" [value]="nouvQuantite"  (input)="onChangeInput($event)" style="width: 3em; height: 1.8em;">
+                <button type="button" class="btn btn-warning m-1 p-1 pt-0 pb-0" (click)="incQuantite()"><i class="bi bi-cart-plus-fill" style="font-size: 1.5em;"></i></button>            
+                
+                <!-- Ajout de la quantite au panier : -->
+                <!-- -------------------------------- -->
+                <button
+                    type="button" class="btn btn-warning m-1 ms-4 p-1 pt-0 pb-0"
+                    (click)="ajouter()" title="Ajouter au panier">
+                    <i class="bi bi-cart-check-fill" style="font-size: 1.5em;"></i>Ajouter
+                </button>
+            </div>
+        </div>      
+    </div>
+  </div>
+
+
+
+<!-- ------------------------------------------------------- -->
+<!-- AFFICHAGE DU MODALE - PRESENTATION DETAILLE DE LA BOX : -->
+<!-- ------------------------------------------------------- -->
+
+<div class="modal fade text-center" id="details-box-{{ box.id }}" tabindex="-1" style="filter: drop-shadow(10px 10px 4px black);">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Barre de titre : -->
+            <!-- ---------------- -->
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5">
+                    <i class="bi bi-box-seam-fill me-2"></i> {{ box.nom }}                    
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Corps principal : -->
+            <!-- ----------------- -->
+            <div class="modal-body">
+
+                <!-- Image de la box : -->
+                <div class="row border-black border-bottom m-0 p-0 mb-2 rounded-5" style="background-image: url('./assets/images/planche.jpg'); box-shadow: 8px 8px 5px black">
+                    <img class="card-img-top col"            
+                    src="{{ pathImage }}/{{ box.image }}"
+                    alt="{{ box.nom }}"
+                    style="width: 18em; filter: drop-shadow(2px 2px 4px black);">
+                </div>
+
+                <!-- Affichage des information de la box : -->
+                <div class="row m-2 mt-4 rounded-2" style="background-image: url('./assets/images/BG-cardText.png'); box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.665)">
+                    <div class="col-3 text-start border-2 border-black border-end ms-4 m-4" >
+                        <h6 class="mb-2"><b>Saveurs :</b></h6>    
+                            <ul class="m-0 ms-2 m-0 p-0 ms-4" *ngFor="let saveur of box.saveurs">
+                                <li>{{ saveur }}</li>
+                            </ul>
+                    </div>
+                    <div class="col text-start m-4 ms-1">
+                        <h6 class="mb-2"><b>Aliments :</b></h6>
+                            <ul class="m-0 p-0 ms-4" *ngFor="let aliment of box.aliments">
+                                <li>{{ aliment.quantite }} x {{ aliment.nom }}</li>
+                            </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pied de page de la card : -->
+            <!-- ------------------------- -->
+            <div class="modal-footer bg-body-secondary">                
+                <div>
+                    <h5>{{ box.nbPieces}} pièces : {{ box.prix }} €</h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+<ul>
+    <li style="margin-bottom: 2em; font-weight: bold; font-size: 1.2em;;">
+        {{ box.nom }} :
+        <img class="card-img-top"
+        src="{{ pathImage }}/{{ box.image }}"
+        alt="{{ box.nom }}"
+        style="width: 20em;">
+        <ul style="font-weight: normal; font-size: normal;">
+        <li style="margin-top: 0.5em;">Nombre de pièces : {{ box.nbPieces }}</li>
+        <li style="margin-top: 0.5em;">Saveurs :</li>
+            <ul>
+                <li *ngFor="let saveur of box.saveurs">{{ saveur }}</li>
+            </ul>
+        <li style="margin-top: 0.5em;">Prix : {{ box.prix }}€</li>
+        <li style="margin-top: 0.5em;">Aliments :</li>
+            <ul>
+                <li *ngFor="let aliment of box.aliments"> {{ aliment.quantite }} x {{ aliment.nom }}</li>
+            </ul>
+        <li style="margin-top: 0.5em; font-size: 1.2em;">Quantité dans le panier : {{ box.quantiteCommande }}</li>
+        </ul>
+    </li>
+</ul> -->

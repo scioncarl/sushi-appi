@@ -1,0 +1,19 @@
+<div class="bg-root">
+
+</div>
+
+<div class="container">
+    <div class="row m-0 p-0">
+        <div class="col-xl-4 col-md-6 m-0 p-0" *ngFor="let box of boxes | keyvalue">
+                <app-card-sushi-boxe
+                    [box]="box.value"
+                ></app-card-sushi-boxe>
+        </div>
+    </div>
+</div>
+
+<!-- <div *ngFor="let box of boxes | keyvalue">
+    <app-card-sushi-boxe
+        [box]="box.value"
+    ></app-card-sushi-boxe>
+</div> -->

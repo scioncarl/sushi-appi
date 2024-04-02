@@ -1,0 +1,89 @@
+
+
+<!-- ENTETE DE L'APPLICATION : -->
+<!-- ------------------------- -->
+<header >
+    <div class="container shadow ">
+        <!-- Marge au-dessus de l'entête -->
+        <div class="row p-1"></div>
+        <div class="row pt-2 align-items-end bg-dark bg-opacity-75 rounded-top-4">
+            
+            <!-- Logo Site : -->
+            <div class="col-1 p-1">
+                <a  routerLink="/home"
+                    routerLinkActive="active">
+                    <img src="./assets/images/Logo.png" class="img-fluid rounded-4 ms-1 mb-1">
+                </a>
+            </div>
+            
+            <!-- Titre/nom site : -->                        
+            <!-- <div class="navbar-brand col bg-warning text-white m-0 p-2 h1">Nom/marque du site</div> -->
+            <div class="col-6  text-start m-0 p-0 ps-4">
+                <span class="titre-site display-1">SushiFast</span>
+                <span class="titre-site-suite display-6 ms-3"><i>Restaurant</i></span>
+            </div>
+            <!-- Sous titre : -->
+            <div class="position-relative titre-secondaire col-5 m-0 pt-0 pb-3 text-end display-6">
+                <b>Sushi-App </b>
+                
+                    <i routerLink="/panier" routerLinkActive="active"
+                    class="bi bi-cart-fill" style="font-size: 1.7em;"
+                    title="Voir votre panier"></i>
+
+                    <!-- Bulle info quantité en panier :  -->               
+                    <span class="position-relative badge rounded-pill"                    
+                    style="font-size: 0.4em;
+                    background-color: rgb(66, 4, 249);
+                    top: -1.3em;
+                    left: -3.2em;">
+                    {{ getNbBox() }}
+                    </span>
+                
+            </div>
+        </div>           
+    </div>
+</header>
+
+
+<!-- BARRE DE NAVIGATION : -->
+<!-- --------------------- -->
+<nav class="navbar navbar-expand p-0 mb-4 sticky-top">
+<!-- <nav class="navbar navbar-expand p-0 mb-4 fixed-top"> -->
+    <div class="container bg-warning bg-opacity-100 rounded-bottom-4 border-top border-dark border-4 border-opacity-50 shadow">
+        <ul class="navbar-nav nav-underline ms-3">
+            
+            <!-- Home : -->
+            <li class="nav-item">
+                <a  class="nav-link text-dark"
+                    routerLink="/home"
+                    routerLinkActive="active"
+                    aria-current="page"
+                    >
+                    <i class="bi bi-house-fill"></i> Home
+                </a>
+            </li>
+
+            <!-- Panier -->
+            <li class="nav-item">
+                <a  class="nav-link text-dark"
+                    routerLink="/panier"
+                    routerLinkActive="active"
+                    aria-current="page"                     
+                    >
+                    <i class="bi bi-cart-fill"></i> Panier
+                </a>
+            </li>
+
+            <!-- Mentions légales -->
+            <!-- <li class="nav-item">
+                <a  class="nav-link text-dark"
+                    routerLink="/rgpd"
+                    routerLinkActive="active"
+                    aria-current="page"                        
+                    >
+                    <i class="bi bi-exclamation-circle-fill"></i> Mentions légales
+                </a>
+            </li> -->
+        </ul>
+    </div>
+</nav>
